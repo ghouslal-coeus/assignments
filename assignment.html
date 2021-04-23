@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Assignment</title>
+    <style>
+        .input-div{
+            padding: 20px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="product-area">
+            <form id="pform" action="">
+            </form>
+            <button onclick="addProductFields()" style="margin-right: 30px;">
+                Add New Prodcut
+            </button>
+            <button onclick="clearPage()" style="margin-right: 30px;">
+                Clear Page
+            </button>
+            <div class="bill">
+                <p id="total_bill"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+        function addProductFields(){
+            // get elements to create their child elements
+            var pForm = document.getElementById('pform');
+            var productDiv = document.getElementsByClassName('product-area')[0];
+
+            var inputDiv = document.createElement("div");
+
+            var nameInput = document.createElement("input");
+            var costInput = document.createElement("input");
+            var quantityInput = document.createElement("input");
+            
+            nameInput.type = 'text';
+            nameInput.name = 'product_name';
+            nameInput.placeholder = 'Product name';
+            
+            costInput.type = 'number';
+            costInput.name = 'cost';
+            costInput.required = true;
+            costInput.placeholder = 'Product Cost';
+            
+            quantityInput.type = 'number';
+            quantityInput.name = 'quantity';
+            quantityInput.required = true;
+            quantityInput.placeholder = 'Product Quantity';
+            
+            
+            inputDiv.className = 'input-div';
+            inputDiv.appendChild(nameInput);
+            inputDiv.appendChild(costInput);
+            inputDiv.appendChild(quantityInput);
+            pForm.appendChild(inputDiv);
+            
+            let bill_button = document.getElementById('bill_button');
+            if(!bill_button){
+                var calculateButton = document.createElement("button");
+                calculateButton.onclick = function(){
+                    window.calculateTotal();
+                };
+                calculateButton.innerHTML = 'Calculate Total';
+                calculateButton.id = 'bill_button';
+                productDiv.appendChild(calculateButton);
+            }
+            // console.log('function call');
+        }
+
+        function calculateTotal(){
+            const form = document.forms["pform"];
+
+            let costElement = form.querySelectorAll('input[name="cost"]');
+            let quantityElement = form.querySelectorAll('input[name="quantity"]');
+
+            var totalBillAmount = 0
+            var i;
+            var len = costElement.length;
+
+            for (i = 0; i < len; i++) {
+
+                    let pTotal = 0;
+                    if (costElement[i].value == "" || quantityElement[i].value == "") {
+                        alert("Product cost and quantity must be filled out");
+                        return false;
+                    }
+
+                    pTotal = parseInt(costElement[i].value) * parseInt(quantityElement[i].value);
+                    totalBillAmount += pTotal;
+            }
+
+            document.getElementById("total_bill").innerHTML = totalBillAmount;
+            console.log('calculate function');
+        }
+
+        function clearPage(){
+            const form = document.getElementById("pform");
+            const billInfo = document.getElementById("total_bill");
+            const billBtn = document.getElementById("bill_button");
+
+            form.innerHTML = '';
+            billInfo.innerHTML = '';
+            billBtn.remove();
+        }
+
+    </script>
+</body>
+</html>
